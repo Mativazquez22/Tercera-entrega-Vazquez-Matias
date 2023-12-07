@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador de Pagos</title>
+<script src="app.js" async></script>
+</head>
+<body>
+
+<!-- Nuevo elemento div para mostrar resultados -->
+<div id="resultados"></div>
+
+<script>
+// Objeto para representar una cuota
+function Cuota(numero, monto) {
+  this.numero = numero;
+  this.monto = monto;
+}
+
+// Función para calcular pagos en cuotas y almacenar en un array de objetos
+function calcularCuotas(monto, cuotas) {
+  // Verificar que el número de cuotas sea válido (mayor que cero)
+  if (cuotas <= 0) {
+    mostrarResultado("El número de cuotas debe ser mayor que cero.");
+    return;
+  }
+
+  // Inicializar un array para almacenar el detalle de las cuotas
+  var detalleCuotas = [];
+
+  // Calcular el monto de cada cuota y almacenar el detalle en el array
+  var montoPorCuota = monto / cuotas;
+  for (var i = 1; i <= cuotas; i++) {
+    var cuota = new Cuota(i, montoPorCuota);
+    detalleCuotas.push(cuota);
+  }
+
+  // Almacenar el detalle de las cuotas en localStorage
+  localStorage.setItem('detalleCuotas', JSON.stringify(detalleCuotas));
+
+  // Llamar a la función para mostrar el detalle de las cuotas
+  mostrarDetalleCuotas(detalleCuotas);
+
+  // Ejemplo de búsqueda por número de cuota
+  var numeroBuscado = 3;
+  var cuotaEncontrada = buscarCuotaPorNumero(detalleCuotas, numeroBuscado);
+  if (cuotaEncontrada) {
+    mostrarResultado("Cuota encontrada - Número: " + cuotaEncontrada.numero + ", Monto: $" + cuotaEncontrada.monto.toFixed(2));
+  } else {
+    mostrarResultado("Cuota no encontrada para el número: " + numeroBuscado);
+  }
+
+  // Ejemplo de modificar el título de la página
+  document.title = "Nuevo Título";
+
+  // Ejemplo de agregar un nuevo párrafo al cuerpo del documento
+  var nuevoParrafo = document.createElement('p');
+  nuevoParrafo.textContent = "Este es un nuevo párrafo.";
+  document.body.appendChild(nuevoParrafo);
+
+  // Ejemplo de modificar el contenido del elemento resultados
+  resultadosElement.innerHTML = "<p>¡Nuevo contenido para resultados!</p>";
+}
+
+// Función para mostrar el detalle de las cuotas
+function mostrarDetalleCuotas(detalleCuotas) {
+  // Crear una cadena de HTML con el detalle de las cuotas
+  var html = "<p>Detalle de pagos en cuotas:</p>";
+  detalleCuotas.forEach(function (cuota) {
+    html += "<p>Cuota " + cuota.numero + ": $" + cuota.monto.toFixed(2) + "</p>";
+  });
+
+  // Mostrar la cadena de HTML en el elemento resultados
+  mostrarResultado(html);
+}
+
+// Función para buscar una cuota por número
+function buscarCuotaPorNumero(detalleCuotas, numeroBuscado) {
+  return detalleCuotas.find(function (cuota) {
+    return cuota.numero === numeroBuscado;
+  });
+}
+
+// Función para mostrar resultados en el elemento resultados
+function mostrarResultado(resultado) {
+  // Obtener el elemento resultados
+  var resultadosElement = document.getElementById('resultados');
+
+  // Añadir el resultado al contenido del elemento
+  resultadosElement.innerHTML += resultado;
+}
+
+// Ejemplo de uso
+var montoTotal = 1000;
+var numeroDeCuotas = 5;
+
+calcularCuotas(montoTotal, numeroDeCuotas);
+</script>
+
+</body>
+</html>
+
+  
+
